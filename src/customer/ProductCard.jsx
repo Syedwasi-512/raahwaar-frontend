@@ -30,9 +30,9 @@ const ProductCardItem = memo(({ product, onClick, formatPrice }) => {
   const displayPrice = product.finalPrice || product.price;
 
   return (
-    <div
+    <Link
       className="group cursor-pointer flex flex-col h-full bg-white"
-      onClick={() => onClick(product._id)}
+      to={`/productDetail/${product._id}`}
     >
       <div className="relative aspect-square overflow-hidden bg-[#F9F9F9] rounded-lg mb-3">
         <img
@@ -85,7 +85,7 @@ const ProductCardItem = memo(({ product, onClick, formatPrice }) => {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 });
 
@@ -470,7 +470,6 @@ const ProductCardPage = () => {
                     <ProductCardItem
                       key={p._id}
                       product={p}
-                      onClick={(id) => navigate(`/productDetail/${id}`)}
                       formatPrice={formatPrice}
                     />
                   ))}
