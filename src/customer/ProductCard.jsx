@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, setSearchQuery } from "../features/productSlice";
 import { getFilters } from "../features/filterService";
 import { optimizeImage } from "../features/imageEngine";
+import { Link } from "react-router-dom";
 import {
   X,
   ChevronDown,
