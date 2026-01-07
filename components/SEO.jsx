@@ -1,16 +1,18 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-const SEO = ({ title, description, image, url}) => {
+const SEO = ({ title, description, image, url }) => {
   const siteName = "Raahwaar.pk";
   const fullTitle = `Buy ${title} Shoes Online in Pakistan | ${siteName}`;
   const defaultDesc =
     "Pakistan's most trusted store for premium imported footwear and thrift items.";
 
   const shareImage = image || "https://your-vercel-link.app/default-logo.png";
+  const fullUrl = url || window.location.href;
 
+  const siteUrl = "https://raahwaar-pk.vercel.app";
   return (
-  <Helmet>
+    <Helmet>
       {/* Standard SEO */}
       <title>{fullTitle}</title>
       <meta name="description" content={description || defaultDesc} />
@@ -21,7 +23,7 @@ const SEO = ({ title, description, image, url}) => {
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description || defaultDesc} />
       <meta property="og:image" content={shareImage} />
-      <meta property="og:url" content={url || window.location.href} />
+      <meta property="og:url" content={fullUrl} />
 
       {/* Twitter Cards */}
       <meta name="twitter:card" content="summary_large_image" />
