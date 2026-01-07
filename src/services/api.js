@@ -7,7 +7,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
   withCredentials: true, // Zaroori hai cookies (Cart logic) handle karne ke liye
-  timeout: 10000, // 10 seconds timeout taake request hang na ho jaye
+  timeout: 60000, // 60 seconds timeout taake request hang na ho jaye
 });
 
 
