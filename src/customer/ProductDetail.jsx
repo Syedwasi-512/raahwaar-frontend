@@ -220,7 +220,7 @@ const ProductDetailPage = () => {
                 </div>
 
                 <div className="grid grid-cols-1 gap-2">
-                  <button onClick={async () => { try { await add(product._id, quantity); setIsAdded(true); setTimeout(() => setIsAdded(false), 2000); } catch(e){ alert(e.message) } }} disabled={!product.inStock || stockLimit === 0} className={`h-11 rounded-md text-[13px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${isAdded ? "bg-green-600 text-white" : "bg-white text-black border border-black hover:bg-black hover:text-white"} disabled:opacity-30`}>
+                  <button onClick={async () => { try { await add(product, quantity); setIsAdded(true); setTimeout(() => setIsAdded(false), 2000); } catch(e){ alert(e.message) } }} disabled={!product.inStock || stockLimit === 0} className={`h-11 rounded-md text-[13px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${isAdded ? "bg-green-600 text-white" : "bg-white text-black border border-black hover:bg-black hover:text-white"} disabled:opacity-30`}>
                     {isAdded ? <Check size={16} /> : <ShoppingBag size={16} />} {isAdded ? "Added" : "Add to Cart"}
                   </button>
                   <button onClick={() => navigate("/order", { state: { product, quantity } })} disabled={!product.inStock || stockLimit === 0} className="h-11 bg-black text-white rounded-md text-[13px] font-bold uppercase tracking-widest hover:bg-[#333] transition-all disabled:opacity-30 flex items-center justify-center gap-2 shadow-sm">

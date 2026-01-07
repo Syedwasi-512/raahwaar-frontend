@@ -11,9 +11,7 @@ const CartContext = createContext();
 
 export const useCart = () => {
   const context = useContext(CartContext);
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
+  if (!context) throw new Error("useCart must be used within a CartProvider");
   return context;
 };
 
@@ -22,100 +20,121 @@ export const CartProvider = ({ children }) => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  /**
-   * REFACTOR: Centralized State Updater
-   * Backend se jo response aata hai usay clean tareeke se state mein set karta hai.
-   */
+  // Helper: Backend response ko state mein sync karne ke liye
   const handleCartResponse = useCallback((data) => {
-    // Hamare naye controller ka response structure: { cart: { items: [] }, total: 0 }
     const cartItems = data?.cart?.items || [];
     const cartTotal = data?.total || 0;
-    
     setItems(cartItems);
     setTotal(cartTotal);
   }, []);
 
-  // --- INITIAL LOAD ---
   const load = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getCart();
       handleCartResponse(res.data);
     } catch (error) {
-      console.error("Cart Loading Error:", error.response?.data?.message || error.message);
+      console.error("Load Error:", error.message);
     } finally {
       setLoading(false);
     }
   }, [handleCartResponse]);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  useEffect(() => { load(); }, [load]);
 
-  // --- ADD TO CART ---
-  const add = async (productId, qty = 1) => {
+  // --- 1. ADD TO CART (Optimistic) ---
+  const add = async (product, qty = 1) => {
+    const previousItems = [...items];
+    const previousTotal = total;
+
+    // Frontend par foran update dikhayen
+    setItems(prev => {
+      const existing = prev.find(i => i.productId === product._id);
+      const price = product.finalPrice || product.price;
+      
+      if (existing) {
+        return prev.map(i => i.productId === product._id ? { ...i, quantity: i.quantity + qty } : i);
+      }
+      return [...prev, { 
+        productId: product._id, 
+        quantity: qty, 
+        finalPrice: price, 
+        product: { title: product.title, image: product.images?.[0]?.url, brand: product.brandId?.name } 
+      }];
+    });
+    setTotal(prev => prev + (product.finalPrice || product.price) * qty);
+
     try {
-      const res = await apiAddToCart(productId, qty);
-      handleCartResponse(res.data);
-      return res;
+      const res = await apiAddToCart(product._id, qty);
+      handleCartResponse(res.data); // Real data sync
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "Failed to add item to cart";
-      console.error("Add Error:", errorMsg);
-      throw new Error(errorMsg); // UI can catch this and show a toast/alert
+      setItems(previousItems); // Rollback on error
+      setTotal(previousTotal);
+      throw new Error(error.response?.data?.message || "Failed to add");
     }
   };
 
-  // --- UPDATE QUANTITY ---
-  const update = async (productId, qty) => {
+  // --- 2. UPDATE QUANTITY (Optimistic) ---
+  const update = async (productId, newQty) => {
+    const previousItems = [...items];
+    const previousTotal = total;
+
+    // Step 1: Update UI instantly
+    setItems(prev => prev.map(item => {
+      if (item.productId === productId) {
+        const diff = newQty - item.quantity;
+        setTotal(t => t + (item.finalPrice * diff));
+        return { ...item, quantity: newQty };
+      }
+      return item;
+    }));
+
     try {
-      const res = await apiUpdateCartItem(productId, qty);
+      const res = await apiUpdateCartItem(productId, newQty);
       handleCartResponse(res.data);
-      return res;
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "Failed to update quantity";
-      console.error("Update Error:", errorMsg);
-      throw new Error(errorMsg);
+      setItems(previousItems); // Rollback
+      setTotal(previousTotal);
+      throw new Error(error.response?.data?.message || "Update failed");
     }
   };
 
-  // --- REMOVE ITEM ---
+  // --- 3. REMOVE ITEM (Optimistic) ---
   const remove = async (productId) => {
+    const previousItems = [...items];
+    const previousTotal = total;
+
+    const itemToRemove = items.find(i => i.productId === productId);
+    setItems(prev => prev.filter(i => i.productId !== productId));
+    if (itemToRemove) setTotal(prev => prev - (itemToRemove.finalPrice * itemToRemove.quantity));
+
     try {
       const res = await apiRemoveFromCart(productId);
       handleCartResponse(res.data);
-      return res;
     } catch (error) {
-      console.error("Remove Error:", error.message);
-      throw error;
+      setItems(previousItems); // Rollback
+      setTotal(previousTotal);
     }
   };
 
-  // --- CLEAR CART ---
+  // --- 4. CLEAR CART (Optimistic) ---
   const clear = async () => {
+    const previousItems = [...items];
+    const previousTotal = total;
+
+    setItems([]);
+    setTotal(0);
+
     try {
-      const res = await apiClearCart();
-      // res.data: { success: true, cart: { items: [] }, total: 0 }
-      handleCartResponse(res.data);
-      return res;
+      await apiClearCart();
     } catch (error) {
-      console.error("Clear Error:", error.message);
-      throw error;
+      setItems(previousItems);
+      setTotal(previousTotal);
     }
   };
 
   return (
-    <CartContext.Provider
-      value={{ 
-        items,      // Current items array
-        total,      // Pre-calculated total amount
-        loading,    // Initial loading state
-        add, 
-        update, 
-        remove, 
-        clear, 
-        reload: load 
-      }}
-    >
+    <CartContext.Provider value={{ items, total, loading, add, update, remove, clear, reload: load }}>
       {children}
     </CartContext.Provider>
   );
