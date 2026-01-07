@@ -163,7 +163,7 @@ const ProductDetailPage = () => {
       <SEO title={product.brandId.name}
           description={`${product.title}} - Condition: ${product.conditionId?.name}. Buy premium footwear at Raahwaar.`}
           image={product.images?.[0]?.url}
-          type="product"
+          url={window.location.href}
       />
       
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 py-3 sm:py-5">

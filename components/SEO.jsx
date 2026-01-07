@@ -1,30 +1,37 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-const SEO = ({ title, description, image, url, type = "website" }) => {
+const SEO = ({ title, description, image, url}) => {
   const siteName = "Raahwaar.pk";
   const fullTitle = `Buy ${title} Shoes Online in Pakistan | ${siteName}`;
-  const defaultDes =
+  const defaultDesc =
     "Pakistan's most trusted store for premium imported footwear and thrift items.";
 
-  return (
-    <Helmet>
-      <title>{fullTitle}</title>
-      <meta name="description" content={description || defaultDes} />
-      <link rel="stylesheet" href={url || window.location.href} />
-      {/* Open Graph / Facebook (Social Media Preview) */}
-      <meta property="og:type" content={type} />
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description || defaultDes} />
-      <meta property="og:image" content={image || "logo.png"} />
-      <meta property="og:url" content={window.location.href} />
-      <meta property="og:site_name" content={siteName} />
+  const shareImage = image || "https://your-vercel-link.app/default-logo.png";
 
-      {/* Twitter Card */}
+  return (
+  <Helmet>
+      {/* Standard SEO */}
+      <title>{fullTitle}</title>
+      <meta name="description" content={description || defaultDesc} />
+
+      {/* Open Graph (Facebook, WhatsApp, Instagram) */}
+      <meta property="og:type" content="product" />
+      <meta property="og:site_name" content={siteName} />
+      <meta property="og:title" content={fullTitle} />
+      <meta property="og:description" content={description || defaultDesc} />
+      <meta property="og:image" content={shareImage} />
+      <meta property="og:url" content={url || window.location.href} />
+
+      {/* Twitter Cards */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description || defaultDes} />
-      <meta name="twitter:image" content={image || "/logo.png"} />
+      <meta name="twitter:description" content={description || defaultDesc} />
+      <meta name="twitter:image" content={shareImage} />
+
+      {/* WhatsApp Specific (Security & Optimization) */}
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
     </Helmet>
   );
 };
