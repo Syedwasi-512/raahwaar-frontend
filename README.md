@@ -45,3 +45,20 @@ The storefront is built as a **Single Page Application (SPA)** with a focus on f
 - **Optimistic State Engine:** Cart operations are handled through an **Optimistic UI pattern**. The local state is updated immediately on user action, while backend synchronization happens in the background, with a built-in **State Rollback** logic for network resilience.
 - **SEO & Meta-Hydration:** Dynamic metadata is injected using `react-helmet-async` on a per-product basis, ensuring that shared links generate rich, informative social previews.
 - **Performance Strategy:** Implements **Component Memoization** and **Lazy Loading** for routes and heavy assets (like the AI assistant and Cart drawer), ensuring a light initial bundle size.
+
+## 📸 Visual Preview & Interface
+
+| 👟 Premium Storefront | ✨ Dynamic Product Experience |
+|:---:|:---:|
+| <img src="./assets/home.png" width="400" /> | <img src="./assets/product_detail.png" width="400" /> |
+| *Fluid 1:1 Aspect Ratio Catalog* | *Interactive Magnifier & Vertical Specs* |
+
+| 🤖 AI Personal Shopper | 💳 Secure Checkout Flow |
+|:---:|:---:|
+| <img src="./assets/ai_chat.png" width="400" /> | <img src="./assets/order.png" width="400" /> |
+| *Llama 3.1 Powered RAG Assistant* | *Optimized for Trust & Conversions* |
+
+| 📊 Admin Control Panel | 📱 Responsive Architecture |
+|:---:|:---:|
+| <img src="./assets/admin.png" width="400" /> | <img src="./assets/mobile.jpg" width="200" /> |
+| *Real-time Inventory & Order Sync* | *Seamless High-Density Mobile UX* |
