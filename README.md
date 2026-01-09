@@ -50,15 +50,15 @@ The storefront is built as a **Single Page Application (SPA)** with a focus on f
 
 | 👟 Premium Storefront | ✨ Dynamic Product Experience |
 |:---:|:---:|
-| <img src="../frontend/src/assets/home.png" width="400" /> | <img src="../frontend/src/assets/product_detail.png" width="400" /> |
+| <img src="./assets/home.png" width="400" /> | <img src="./assets/product_detail.png" width="400" /> |
 | *Fluid 1:1 Aspect Ratio Catalog* | *Interactive Magnifier & Vertical Specs* |
 
 | 🤖 AI Personal Shopper | 💳 Secure Checkout Flow |
 |:---:|:---:|
-| <img src="../frontend/src/assets/ai_chat.png" width="400" /> | <img src="../frontend/src/assets/order.png" width="400" /> |
+| <img src="./assets/ai_chat.png" width="400" /> | <img src="./assets/order.png" width="400" /> |
 | *Llama 3.1 Powered RAG Assistant* | *Optimized for Trust & Conversions* |
 
 | 📊 Admin Control Panel | 📱 Responsive Architecture |
 |:---:|:---:|
-| <img src="../frontend/src/assets/admin.png" width="400" /> | <img src="../frontend/src/assets/mobile.jpeg" width="200" /> |
+| <img src="./assets/admin.png" width="400" /> | <img src="./assets/mobile.jpeg" width="200" /> |
 | *Real-time Inventory & Order Sync* | *Seamless High-Density Mobile UX* |
